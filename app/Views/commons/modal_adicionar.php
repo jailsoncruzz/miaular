@@ -66,24 +66,20 @@
 
 <script>
     function alternarFoto(tipo) {
-        // Pega os dois containers (caixas)
         const divUpload = document.getElementById('containerUpload');
         const divLink   = document.getElementById('containerLink');
         
-        // Pega os inputs dentro deles para limpar se trocar
         const inputArquivo = divUpload.querySelector('input');
         const inputUrl     = divLink.querySelector('input');
 
         if (tipo === 'upload') {
-            // Se escolheu UPLOAD:
-            divUpload.classList.remove('d-none'); // Mostra Upload
-            divLink.classList.add('d-none');      // Esconde Link
-            inputUrl.value = '';                  // Limpa o link escrito
+            divUpload.classList.remove('d-none'); 
+            divLink.classList.add('d-none'); 
+            inputUrl.value = '';
         } else {
-            // Se escolheu LINK:
-            divUpload.classList.add('d-none');    // Esconde Upload
-            divLink.classList.remove('d-none');   // Mostra Link
-            inputArquivo.value = '';              // Limpa o arquivo selecionado
+            divUpload.classList.add('d-none'); 
+            divLink.classList.remove('d-none');
+            inputArquivo.value = '';
         }
     }
 </script>

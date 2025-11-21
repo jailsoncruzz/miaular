@@ -5,33 +5,41 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Home::index');
 
-// Rotas de Autenticação
+
+$routes->get('/', 'Home::index');
 $routes->get('login', 'Auth::login');
 $routes->post('login/autenticar', 'Auth::autenticar');
 $routes->get('cadastro', 'Auth::cadastro');
 $routes->post('cadastro/salvar', 'Auth::salvar');
 $routes->get('logout', 'Auth::logout');
 
-// --- ROTAS GERAIS (Qualquer usuário LOGADO) ---
-// O filtro 'auth' verifica se está logado. Se não, manda para login.
 $routes->group('', ['filter' => 'auth'], function ($routes) {
 
-    // Botão "Adoção" do menu vai para cá
     $routes->get('gatos/adocao', 'Gatos::adocao');
 
-    // Edição de perfil do usuário
-    $routes->get('perfil/editar', 'Usuario::editar');
+    $routes->group('perfil', function ($routes) {
+        $routes->get('editar', 'Usuario::editar');
+        $routes->post('salvar', 'Usuario::salvar');
+    });
+
+    $routes->group('solicitacoes', function ($routes) {
+        $routes->get('/', 'Solicitacoes::index'); 
+        $routes->post('criar', 'Solicitacoes::criar'); 
+        $routes->get('chat/(:num)', 'Solicitacoes::chat/$1'); 
+        $routes->post('responder', 'Solicitacoes::responder'); 
+        $routes->post('gerenciar', 'Solicitacoes::gerenciar'); 
+    });
 });
 
 
-// --- ROTAS DE GESTÃO DE GATOS (Apenas ONG ou Protetor) ---
-// O filtro 'gestor' deve permitir apenas perfis 'ong' e 'protetor'.
-// O botão "Adicionar" do menu vai para 'gatos/adicionar'.
-// GRUPO PROTEGIDO (Se tentar acessar sem logar, o filtro 'auth' joga pro Login)
-$routes->group('gatos', ['filter' => 'auth'], function($routes) {
-    $routes->get('adicionar', 'Gatos::novo');   // Botão Adicionar leva aqui
+// O filtro 'gestor' bloqueia Adotantes e Visitantes.
+$routes->group('gatos', ['filter' => 'gestor'], function ($routes) {
+
     $routes->post('salvar', 'Gatos::salvar');
-    $routes->get('adocao', 'Gatos::adocao'); // Botão Adoção leva aqui
+    $routes->post('editar', 'Gatos::editar');
+
+    $routes->get('meus-gatos', 'Gatos::meusGatos');
+    $routes->get('excluir/(:num)', 'Gatos::excluir/$1');
+    $routes->get('status/(:num)', 'Gatos::alternarStatus/$1');
 });

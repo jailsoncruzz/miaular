@@ -10,13 +10,12 @@ class Home extends BaseController
 
         $data = [
             'titulo' => 'Home - MiauLar',
-            'gatos'  => $model->orderBy('id', 'DESC')->paginate(6),
-            'pager'  => $model->pager
+            'gatos'  => $model->where('adotado', GatoModel::DISPONIVEL)->orderBy('id', 'DESC')->findAll(6),
         ];
 
         echo view('commons/header', $data);
         echo view('commons/navbar');
-        echo view('home', $data); // A view home agora recebe $gatos e $pager
+        echo view('home', $data);
         echo view('commons/footer');
     }
 }

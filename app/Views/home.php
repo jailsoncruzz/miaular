@@ -16,19 +16,15 @@
 </div>
 
 <section class="white-section" id="features">
-  <h2 class="section-heading">Gatinhos disponíveis para adoção!</h2>
-  <p>Conheça nossos amiguinhos especiais. Cada um tem sua personalidade única!</p>
+  <h2 class="section-heading">Chegaram Recentemente!</h2>
+  <p>Estes são os gatinhos cadastrados por último.</p>
 
   <div class="row">
 
     <?php if (!empty($gatos) && is_array($gatos)) : ?>
-
       <?php foreach ($gatos as $gato) : ?>
-
         <?php
-  
         $imgGenerica = base_url('imgs/sem-foto.jpg');
-
         $imagemUrl = $imgGenerica;
 
         if (!empty($gato['foto'])) {
@@ -43,7 +39,6 @@
         <div class="pricing-cards col-lg-4 col-md-6 mb-4">
           <div class="card h-100 shadow-sm">
             <div class="card-header p-0 overflow-hidden" style="height: 250px;">
-
               <img src="<?= $imagemUrl ?>"
                 alt="Foto de <?= esc($gato['nome']) ?>"
                 class="card-img-top"
@@ -54,27 +49,22 @@
               <h2 class="card-title"><?= esc($gato['nome']) ?></h2>
               <h6 class="text-muted"><?= esc($gato['idade']) ?></h6>
               <p class="card-text text-truncate-3"><?= esc($gato['descricao']) ?></p>
-
-              <button class="btn btn-lg btn-block btn-outline-info mt-auto" type="button">
-                <i class="fa-regular fa-heart me-2"></i>Quero adotar
-              </button>
             </div>
           </div>
         </div>
-
       <?php endforeach; ?>
-
     <?php else : ?>
       <div class="col-12 text-center py-5">
-        <h3 class="text-muted">Nenhum gatinho cadastrado no momento. 😿</h3>
-        <p>Volte em breve ou cadastre um se você for uma ONG/Protetor!</p>
+        <h3 class="text-muted">Nenhum gatinho recente. 😿</h3>
       </div>
     <?php endif; ?>
 
   </div>
 
-  <div class="d-flex justify-content-center mt-4">
-    <?= $pager->links('default', 'bs_full') ?>
+  <div class="text-center mt-5">
+    <a href="<?= base_url('gatos/adocao') ?>" class="btn btn-dark btn-lg px-5">
+      <span class="fa-regular fa-heart me-2"></span> Ver todos os gatinhos para Adoção
+    </a>
   </div>
 
 </section>
