@@ -1,68 +1,139 @@
-# CodeIgniter 4 Application Starter
+# 🐱 MiauLar - Plataforma de Adoção de Gatos
 
-## What is CodeIgniter?
+**MiauLar** é uma plataforma web desenvolvida para conectar gatinhos que precisam de um lar com adotantes amorosos. O sistema permite que ONGs e Protetores Independentes cadastrem seus animais e gerenciem solicitações de adoção através de um chat integrado.
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+## Tecnologias Utilizadas
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+* **Back-end:** PHP 7.4+ / CodeIgniter 4 Framework
+* **Front-end:** HTML5, CSS3, Bootstrap 5.3.2
+* **Banco de Dados:** MySQL
+* **Ambiente de Desenvolvimento:** XAMPP
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+---
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+## Funcionalidades
 
-## Installation & updates
+* **Autenticação:** Cadastro e Login com diferenciação de perfis (Adotante, Protetor, ONG).
+* **Gestão de Gatos:**
+    * Cadastro de gatos com fotos (Upload local ou Link externo).
+    * Edição e Exclusão (Soft Delete) de perfis de gatos.
+    * Gestão de status (Disponível/Adotado).
+* **Adoção:**
+    * Fluxo de solicitação de adoção.
+    * Chat em tempo real (estilo ticket) entre Adotante e Protetor.
+    * Liberação de contato e finalização de adoção.
+* **Notificações:**
+    * Sistema de notificações visuais (Sininho) para novas solicitações e respostas.
+    * Toasts (Alertas flutuantes) para feedback de ações.
+* **Segurança:** Proteção CSRF, Hash de senhas e Filtros de Rotas (Guards).
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+---
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+## ⚙️ Pré-requisitos
 
-## Setup
+Para rodar este projeto localmente, você precisará ter instalado:
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+1.  **[XAMPP](https://www.apachefriends.org/pt_br/index.html):** (Para o servidor Apache e banco MySQL).
+2.  **[Composer](https://getcomposer.org/):** (Gerenciador de dependências do PHP).
+3.  **[Git](https://git-scm.com/):** (Para clonar o repositório).
 
-## Important Change with index.php
+> **Nota:** Certifique-se de que o PHP habilitado no XAMPP seja a versão **7.4 ou superior** (Recomendado 8.1+).
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+---
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+## Passo a Passo de Instalação
 
-**Please** read the user guide for a better explanation of how CI4 works!
+### 1. Clonar o Repositório
+Abra seu terminal (Git Bash ou CMD) e navegue até a pasta `htdocs` do seu XAMPP (geralmente `C:\xampp\htdocs`) e clone o projeto:
 
-## Repository Management
+```bash
+cd C:\xampp\htdocs
+git clone [https://github.com/jailsoncruzz/miaular.git](https://github.com/jailsoncruzz/miaular.git)
+cd miaular
+```
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+### 2. Instalar Dependências
+Dentro da pasta do projeto, rode o comando do Composer para baixar as bibliotecas do CodeIgniter:
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+```bash
+composer install
+```
 
-## Server Requirements
+### 3. Configurar o Banco de Dados
+1.  Inicie o **Apache** e o **MySQL** no painel do XAMPP.
+2.  Acesse o **phpMyAdmin** (geralmente `http://localhost/phpmyadmin`).
+3.  Crie um novo banco de dados chamado: `miaular_db`.
+    * *Collation recomendada:* `utf8mb4_general_ci`.
 
-PHP version 7.4 or higher is required, with the following extensions installed:
+### 4. Configurar Variáveis de Ambiente (.env)
+1.  Na raiz do projeto, localize o arquivo `env`.
+2.  Renomeie-o para `.env`.
+3.  Abra o arquivo e faça as seguintes alterações (remova o `#` do início das linhas para descomentar e ativar):
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+```ini
+# Ambiente de desenvolvimento (Mostra erros detalhados)
+CI_ENVIRONMENT = development
 
-> [!WARNING]
-> The end of life date for PHP 7.4 was November 28, 2022.
-> The end of life date for PHP 8.0 was November 26, 2023.
-> If you are still using PHP 7.4 or 8.0, you should upgrade immediately.
-> The end of life date for PHP 8.1 will be November 25, 2024.
+# Configuração do Banco de Dados
+database.default.hostname = localhost
+database.default.database = miaular_db
+database.default.username = root
+database.default.password = 
+database.default.DBDriver = MySQLi
+```
+> **Nota:** Se você configurou uma senha para o root do MySQL no XAMPP, coloque-a em `database.default.password`.
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+### 5. Criar as Tabelas (Migrations)
+No terminal, dentro da pasta do projeto, execute o comando do CodeIgniter para criar as tabelas (usuários, gatos, solicitações, mensagens) automaticamente:
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+```bash
+php spark migrate
+```
+
+---
+
+## Como Rodar o Projeto
+
+1.  Certifique-se que o **MySQL** está rodando no XAMPP.
+
+3.  Acesse em seu navegador:
+    **http://localhost/projeto-miaular/**
+
+---
+
+## Configuração de Uploads (Importante!)
+
+Para que o upload de fotos dos gatos funcione, o sistema precisa de uma pasta com permissão de escrita. O Git geralmente não envia pastas vazias, então você deve criá-la manualmente:
+
+1.  Vá até a pasta `public`.
+2.  Crie uma nova pasta chamada `uploads`.
+
+A estrutura deve ficar assim:
+(Crie estas pastas se elas não existirem!)
+```text
+miaular/
+└── public/
+    ├── css/
+    ├── imgs/
+    └── uploads/
+```
+
+---
+
+## Guia de Testes (Como usar)
+
+Para testar todas as funcionalidades, recomendo o seguinte fluxo:
+
+1.  **Crie uma conta de ONG:**
+    * Vá em Cadastrar -> Selecione "Protetor/ONG".
+    * Faça login e clique em "Adicionar" para cadastrar alguns gatos.
+2.  **Crie uma conta de Adotante:**
+    * Abra uma aba anônima (ou use outro navegador).
+    * Vá em Cadastrar -> Selecione "Adotante".
+    * Vá na página de Adoção, escolha um gato e clique em "Quero Adotar".
+3.  **Interaja:**
+    * Volte na conta da ONG.
+    * Observe o **Sininho de Notificação** vermelho no menu.
+    * Clique nele para ver a solicitação, responda o chat e libere o contato ou conclua a adoção.
+
+---
