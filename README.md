@@ -4,7 +4,7 @@
 
 ## Tecnologias Utilizadas
 
-* **Back-end:** PHP 7.4+ / CodeIgniter 4 Framework
+* **Back-end:** PHP 7.4.3 / CodeIgniter 4 Framework
 * **Front-end:** HTML5, CSS3, Bootstrap 5.3.2
 * **Banco de Dados:** MySQL
 * **Ambiente de Desenvolvimento:** XAMPP
