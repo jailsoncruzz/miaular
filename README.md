@@ -97,7 +97,7 @@ php spark migrate
 1.  Certifique-se que o **MySQL** está rodando no XAMPP.
 
 3.  Acesse em seu navegador:
-    **http://localhost/projeto-miaular/**
+    **http://localhost/miaular/**
 
 ---
 
