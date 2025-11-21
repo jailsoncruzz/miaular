@@ -9,33 +9,47 @@ class Gatos extends BaseController
 
     public function novo()
     {
-        // Graças ao Filtro, só chega aqui se estiver logado
-        return view('adicionar_gato');
+        return view('adicionar');
     }
 
     public function salvar()
     {
         $model = new GatoModel();
+        $fotoFinal = '';
 
-        // Upload da Imagem
-        $img = $this->request->getFile('foto');
-        $nomeFoto = '';
+        $img = $this->request->getFile('arquivo_foto');
 
-        if ($img->isValid() && !$img->hasMoved()) {
-            $nomeFoto = $img->getRandomName();
-            $img->move('uploads/', $nomeFoto); // Move para public/uploads
+        if ($img && $img->isValid() && !$img->hasMoved()) {
+
+            $novoNome = $img->getRandomName();
+
+            $img->move(FCPATH . 'uploads', $novoNome);
+
+            $fotoFinal = 'uploads/' . $novoNome;
+        } else {
+            $link = $this->request->getPost('url_foto');
+
+            if (!empty($link)) {
+                $fotoFinal = $link;
+            } else {
+                $fotoFinal = 'imgs/sem-foto.jpg';
+            }
         }
 
+        // 3. Salva no Banco
         $dados = [
-            'usuario_id' => session()->get('id'), // ID do usuário da sessão
+            'usuario_id' => session()->get('id'),
             'nome'       => $this->request->getPost('nome'),
             'idade'      => $this->request->getPost('idade'),
             'descricao'  => $this->request->getPost('descricao'),
-            'foto'       => $nomeFoto
+            'foto'       => $fotoFinal
         ];
 
-        $model->save($dados);
-        return redirect()->to('/');
+        if ($model->save($dados)) {
+            return redirect()->to('/')->with('msg-success', 'Gato cadastrado com sucesso!');
+        } else {
+            return redirect()->back()->with('msg', 'Erro ao salvar.');
+        }
     }
 
     public function adocao()

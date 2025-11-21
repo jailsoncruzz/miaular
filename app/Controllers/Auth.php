@@ -6,7 +6,6 @@ use App\Models\UsuarioModel;
 
 class Auth extends BaseController
 {
-    // ---------------- LOGIN ---------------- //
     
     public function login()
     {
@@ -16,7 +15,6 @@ class Auth extends BaseController
         
         echo view('commons/header', $data);
         echo view('commons/navbar_login');
-        // Sem navbar no login
         echo view('login');
         echo view('commons/footer');
     }
@@ -26,15 +24,12 @@ class Auth extends BaseController
         $session = session();
         $model = new UsuarioModel();
         
-        // Pega dados do formulário (os 'name' dos inputs)
         $email = $this->request->getPost('email');
         $senha = $this->request->getPost('senha');
         
-        // Busca no banco
         $user = $model->where('email', $email)->first();
         
         if ($user) {
-            // Verifica se a senha bate com o hash do banco
             if (password_verify($senha, $user['senha'])) {
                 $ses_data = [
                     'id'         => $user['id'],
@@ -55,7 +50,6 @@ class Auth extends BaseController
         }
     }
 
-    // ---------------- CADASTRO ---------------- //
 
     public function cadastro()
     {
@@ -73,7 +67,6 @@ class Auth extends BaseController
     {
         $model = new UsuarioModel();
 
-        // 1. Definir regras de validação
         $regras = [
             'perfil'   => [
                 'rules'  => 'required|in_list[adotante,protetor,ong]',
@@ -100,14 +93,11 @@ class Auth extends BaseController
             ]
         ];
 
-        // 2. Executar a validação
         if (!$this->validate($regras)) {
             // FALHA: Volta para o cadastro com os erros e os dados preenchidos
             return redirect()->to('/cadastro')->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        // 3. Preparar dados para salvar
-        // (A senha será criptografada automaticamente pelo Model, conforme configuramos antes)
         $dados = [
             'nome'     => $this->request->getPost('nome'),
             'email'    => $this->request->getPost('email'),
@@ -116,10 +106,8 @@ class Auth extends BaseController
             'senha'    => $this->request->getPost('senha'),
         ];
 
-        // 4. Salvar no Banco
         $model->save($dados);
 
-        // 5. SUCESSO: Manda para o login com mensagem verde
         return redirect()->to('/login')->with('msg-success', 'Cadastro realizado com sucesso! Faça login para entrar.');
     }
 
