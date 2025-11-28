@@ -1,5 +1,7 @@
 # 🐱 MiauLar - Plataforma de Adoção de Gatos
 
+> **Versão em Produção:** Acesse o projeto online em [miaular.great-site.net](http://miaular.great-site.net)
+
 **MiauLar** é uma plataforma web desenvolvida para conectar gatinhos que precisam de um lar com adotantes amorosos. O sistema permite que ONGs e Protetores Independentes cadastrem seus animais e gerenciem solicitações de adoção através de um chat integrado.
 
 ## Tecnologias Utilizadas
